@@ -49,7 +49,6 @@ class _UserLoginState extends State<UserLogin> {
                     width: screenWidth * 0.9,
                     child: Image.asset("assets/login.jpg"),
                   ),
-                  Text("User"),
                   Text(
                     "Welcome",
                     style: GoogleFonts.merriweather(  //merriweather
@@ -137,16 +136,16 @@ class _UserLoginState extends State<UserLogin> {
                     height: 10,
                   ),
                   RoundButton(
-                    title: "Login",
+                    title: "User Login",
                     onTap: () async {
                       print(emailController.text);
                       print(passwordController.text);
-                      UserLoginModel data = await UserLoginAPI().userLogin(emailController.text, passwordController.text,"user");
-                      if (formKey.currentState!.validate() && data.token!=null) {
-                        debugPrint(data.token);
-                          Navigator.push(context, MaterialPageRoute(builder: (context)=>DashBoard()));
-                      }
-
+                      // UserLoginModel data = await UserLoginAPI().userLogin(emailController.text, passwordController.text,"user");
+                      // if (formKey.currentState!.validate() && data.token!=null) {
+                      //   debugPrint(data.token);
+                      //     Navigator.push(context, MaterialPageRoute(builder: (context)=>DashBoard()));
+                      // }
+                      Navigator.push(context, MaterialPageRoute(builder: (context)=>DashBoard()));
                       // Add login logic here
                     },
                   ),

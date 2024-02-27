@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sgp_project_6/utils/askRole.dart';
+import 'package:sgp_project_6/utils/pharmacy_info.dart';
+import 'package:sgp_project_6/utils/search.dart';
 
 void main() {
   runApp(MyApp());
@@ -15,6 +17,9 @@ class MyApp extends StatelessWidget {
      // theme: ThemeData(fontFamily: 'RobotoMono'),
       debugShowCheckedModeBanner: false,
       home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      routes: {
+        '/pharmacy_info': (context) => PharmacyInfo(),
+      },
     );
   }
 }

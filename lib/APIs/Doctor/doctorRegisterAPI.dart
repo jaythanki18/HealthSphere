@@ -1,8 +1,10 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:async';
+import 'package:http_parser/http_parser.dart';
+import 'package:http/http.dart' as http;
 
 import 'package:sgp_project_6/Models/Doctor/doctorRegisterModel.dart';
-import 'package:http/http.dart' as http;
 
 class DoctorRegisterAPI {
   DoctorRegisterAPI();
@@ -16,7 +18,7 @@ class DoctorRegisterAPI {
       File doctorCertificate,
       String password,
       ) async {
-    var url = "http://192.168.75.8:3000/doctor";
+    var url = "http://192.168.111.8:3000/doctor";
     print("Request URL: ${Uri.parse(url)}");
     print(
         "$fullName $mobileNumber $email $doctorId $doctorPhoto $doctorCertificate $password");
@@ -33,22 +35,30 @@ class DoctorRegisterAPI {
 
       // Attach the image file
       if (doctorPhoto != null) {
-        request.files.add(
-          await http.MultipartFile.fromPath(
-            'doctor_photo',
-            doctorPhoto.path,
-          ),
+        var photostream = http.ByteStream(doctorPhoto.openRead());
+        var photosize = await doctorPhoto.length();
+        var photofile = http.MultipartFile(
+          "doctor_photo",
+          photostream,
+          photosize,
+          filename: doctorPhoto.path.split('/').last,
+          contentType: MediaType('image', 'jpeg'), // Change content type if necessary
         );
+        request.files.add(photofile);
       }
 
       // Attach the certificate file
       if (doctorCertificate != null) {
-        request.files.add(
-          await http.MultipartFile.fromPath(
-            'doctor_certificate',
-            doctorCertificate.path,
-          ),
+        var certstream = http.ByteStream(doctorCertificate.openRead());
+        var certsize = await doctorCertificate.length();
+        var certfile = http.MultipartFile(
+          "doctor_certificate",
+          certstream,
+          certsize,
+          filename: doctorCertificate.path.split('/').last,
+          contentType: MediaType('application', 'pdf'), // Change content type if necessary
         );
+        request.files.add(certfile);
       }
 
       // Send the request

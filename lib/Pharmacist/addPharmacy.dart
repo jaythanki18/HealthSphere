@@ -1,49 +1,57 @@
 import 'dart:convert';
 import 'dart:io';
-
-//import 'package:sgp_project_6/Models/Pharmacist/pharmacistRegisterModel.dart';
+import 'package:country_state_city_pro/country_state_city_pro.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:sgp_project_6/utils/dashboard.dart';
-
-//import '../APIs/Pharmacist/pharmacistRegisterAPI.dart';
-import '../APIs/Pharmacist/pharmacistRegisterAPI.dart';
-import '../Models/Pharmacist/pharmacistRegisterModel.dart';
+import 'package:sgp_project_6/APIs/Pharmacy/createPharmacyAPI.dart';
+import 'package:sgp_project_6/Models/Pharmacy/createPharmacyModel.dart';
 import '../Widgets/RoundButton.dart';
+import '../utils/dashboard.dart';
 
-class PharmacistRegister extends StatefulWidget {
-  const PharmacistRegister({Key? key}) : super(key: key);
+class AddPharmacy extends StatefulWidget {
+  const AddPharmacy({Key? key}) : super(key: key);
 
   @override
-  State<PharmacistRegister> createState() => _PharmacistRegisterState();
+  State<AddPharmacy> createState() => _AddPharmacyState();
 }
 
-class _PharmacistRegisterState extends State<PharmacistRegister> {
+class _AddPharmacyState extends State<AddPharmacy> {
   TextEditingController nameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
-  TextEditingController password2Controller = TextEditingController();
   TextEditingController mobileController = TextEditingController();
-  TextEditingController liscenceController = TextEditingController();
+  TextEditingController pharmacy_no = TextEditingController();
+  TextEditingController pharmacist_id = TextEditingController();
+  TextEditingController country=TextEditingController();
+  TextEditingController state=TextEditingController();
+  TextEditingController city=TextEditingController();
+  TextEditingController address=TextEditingController();
   String email = "";
   String phone = "";
   String password = "";
   String name = "";
   String photo = "";
+  String addressStr="";
   int medicalStudent = 0;
-  String liscence="";
+  String pharmacy_num="";
+  int pharmacistid=0;
   bool obsecure1 = true;
   bool obsecure2 = true;
   final formKey = GlobalKey<FormState>();
   File? _selectedImage;
   File? _selectedPdf;
 
+  late String countryValue;
+  late String stateValue;
+  late String cityValue;
+
   @override
   void initState() {
     super.initState();
   }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -71,9 +79,7 @@ class _PharmacistRegisterState extends State<PharmacistRegister> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    SizedBox(
-                      height: screenHeight * 0.1,
-                    ),
+
                     InkWell(
                       onTap: () {
                         _pickImageFromGallery();
@@ -84,13 +90,13 @@ class _PharmacistRegisterState extends State<PharmacistRegister> {
                         decoration: BoxDecoration(color: Colors.white),
                         child: _selectedImage != null
                             ? Image.file(
-                                _selectedImage!,
-                                fit: BoxFit.fitHeight,
-                              )
+                          _selectedImage!,
+                          fit: BoxFit.fitHeight,
+                        )
                             : Container(
-                                decoration: BoxDecoration(color: Colors.white),
-                                child: Image.asset("assets/add.png"),
-                              ),
+                          decoration: BoxDecoration(color: Colors.white),
+                          child: Image.asset("assets/add.png"),
+                        ),
                       ),
                     ),
                     SizedBox(
@@ -98,7 +104,7 @@ class _PharmacistRegisterState extends State<PharmacistRegister> {
                     ),
                     Container(
                       child: Text(
-                        "Register Pharmacist",
+                        "Add Pharmacy",
                         style: GoogleFonts.montserrat(
                           textStyle: TextStyle(
                               fontSize: 30,
@@ -116,45 +122,45 @@ class _PharmacistRegisterState extends State<PharmacistRegister> {
                       children: <Widget>[
                         _selectedPdf != null
                             ? ElevatedButton.icon(
-                                onPressed: _pickPdf,
-                                icon: Icon(Icons.picture_as_pdf,
-                                    size: 35.0, color: Colors.red),
-                                label: SizedBox(
-                                  width: 200,
-                                  height: 50,
-                                  child: Center(
-                                    child: Text(
-                                      _selectedPdf!.path
-                                          .split('/')
-                                          .last, // Show only filename
-                                      style: TextStyle(
-                                          fontSize: 16.0, color: Colors.black),
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                  ),
-                                ),
-                                style: ElevatedButton.styleFrom(
-                                    backgroundColor: Colors.white),
-                              )
-                            : ElevatedButton.icon(
-                                onPressed: _pickPdf,
-                                icon: Icon(
-                                  Icons.picture_as_pdf,
-                                  size: 35.0,
-                                  color: Colors.red,
-                                ),
-                                label: SizedBox(
-                                    width: 200,
-                                    height: 50,
-                                    child: Center(
-                                        child: Text(
-                                      'Attach Pharmacist certificate',
-                                      style: TextStyle(color: Colors.black),
-                                    ))),
-                                style: ElevatedButton.styleFrom(
-                                    backgroundColor: Colors.white),
+                          onPressed: _pickPdf,
+                          icon: Icon(Icons.picture_as_pdf,
+                              size: 35.0, color: Colors.red),
+                          label: SizedBox(
+                            width: 200,
+                            height: 50,
+                            child: Center(
+                              child: Text(
+                                _selectedPdf!.path
+                                    .split('/')
+                                    .last, // Show only filename
+                                style: TextStyle(
+                                    fontSize: 16.0, color: Colors.black),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
                               ),
+                            ),
+                          ),
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.white),
+                        )
+                            : ElevatedButton.icon(
+                          onPressed: _pickPdf,
+                          icon: Icon(
+                            Icons.picture_as_pdf,
+                            size: 35.0,
+                            color: Colors.red,
+                          ),
+                          label: SizedBox(
+                              width: 200,
+                              height: 50,
+                              child: Center(
+                                  child: Text(
+                                    'Attach Pharmacy certificate',
+                                    style: TextStyle(color: Colors.black),
+                                  ))),
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.white),
+                        ),
                         SizedBox(height: 20.0),
                       ],
                     ),
@@ -230,10 +236,10 @@ class _PharmacistRegisterState extends State<PharmacistRegister> {
                     Container(
                       child: TextFormField(
                         onChanged: (value) {
-                          liscence = value;
+                          pharmacy_num = value;
                           setState(() {});
                         },
-                        controller: liscenceController,
+                        controller: pharmacy_no,
                         keyboardType: TextInputType.text,
                         validator: (value) {},
                         decoration: InputDecoration(
@@ -241,7 +247,7 @@ class _PharmacistRegisterState extends State<PharmacistRegister> {
                             borderRadius: BorderRadius.circular(15.0),
                             borderSide: BorderSide.none,
                           ),
-                          labelText: "Pharmacist Liscence",
+                          labelText: "Pharmacy Number",
                           labelStyle: GoogleFonts.poppins(
                             textStyle: TextStyle(
                                 color: Color.fromRGBO(62, 86, 115, 1),
@@ -256,6 +262,35 @@ class _PharmacistRegisterState extends State<PharmacistRegister> {
                     SizedBox(
                       height: 10,
                     ),
+                Container(
+                  child: TextFormField(
+                    onChanged: (value) {
+                      pharmacistid = value as int;
+                      setState(() {});
+                    },
+                    controller: pharmacist_id,
+                    keyboardType: TextInputType.text,
+                    validator: (value) {},
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(15.0),
+                        borderSide: BorderSide.none,
+                      ),
+                      labelText: "Pharmacist Id",
+                      labelStyle: GoogleFonts.poppins(
+                        textStyle: TextStyle(
+                            color: Color.fromRGBO(62, 86, 115, 1),
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      filled: true,
+                      fillColor: Colors.grey[200],
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
                     Container(
                       child: TextFormField(
                         onChanged: (value) {
@@ -286,120 +321,58 @@ class _PharmacistRegisterState extends State<PharmacistRegister> {
                       height: 10,
                     ),
                     Container(
-                      child: TextFormField(
-                        onChanged: (value) {
-                          password = value;
-                          setState(() {});
-                        },
-                        controller: passwordController,
-                        obscureText: obsecure1,
-                        keyboardType: TextInputType.text,
-                        validator: (PassCurrentValue) {
-                          var passNonNullValue = PassCurrentValue ?? "";
-                          if (passNonNullValue.isEmpty) {
-                            return ("Password is required");
-                          } else if (passNonNullValue.length < 6) {
-                            return ("Password Must be more than 5 characters");
-                          }
-                          return null;
-                        },
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(15.0),
-                            borderSide: BorderSide.none,
-                          ),
-                          labelText: "Password",
-                          suffixIcon: IconButton(
-                            onPressed: () {
-                              setState(() {
-                                Icon(Icons.visibility);
-                                obsecure1 == true
-                                    ? obsecure1 = false
-                                    : obsecure1 = true;
-                              });
-                            },
-                            icon: Icon(Icons.visibility_off),
-                          ),
-                          labelStyle: GoogleFonts.poppins(
-                            textStyle: TextStyle(
-                                color: Color.fromRGBO(62, 86, 115, 1),
-                                fontSize: 15,
-                                fontWeight: FontWeight.bold),
-                          ),
-                          filled: true,
-                          fillColor: Colors.grey[200],
-                        ),
+                      child:  CountryStateCityPicker(
+                          country: country,
+                          state: state,
+                          city: city,
+                          dialogColor: Colors.grey[200],
+                          textFieldDecoration: InputDecoration(
+                            hintStyle: TextStyle(color: Color.fromRGBO(62, 86, 115, 1),fontWeight: FontWeight.bold),
+                              focusColor: Color.fromRGBO(62, 86, 115, 1),
+                              fillColor: Colors.grey[200],
+                              filled: true,
+                              suffixIcon: const Icon(Icons.arrow_downward_rounded,color: Color.fromRGBO(62, 86, 115, 1)),
+                              border: const OutlineInputBorder(borderSide: BorderSide.none,borderRadius: BorderRadius.all(Radius.circular(10))))
                       ),
                     ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Container(
-                      child: TextFormField(
-                        onChanged: (value) {
-                          password = value;
-                          setState(() {});
-                        },
-                        controller: password2Controller,
-                        obscureText: obsecure2,
-                        keyboardType: TextInputType.text,
-                        validator: (PassCurrentValue) {
-                          var passNonNullValue = PassCurrentValue ?? "";
-                          if (passNonNullValue.isEmpty) {
-                            return ("Password is required");
-                          } else if (passNonNullValue.length < 6) {
-                            return ("Password Must be more than 5 characters");
-                          }
-                          return null;
-                        },
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(15.0),
-                            borderSide: BorderSide.none,
-                          ),
-                          labelText: "Confirm Password",
-                          suffixIcon: IconButton(
-                            onPressed: () {
-                              setState(() {
-                                Icon(Icons.visibility);
-                                obsecure2 == true
-                                    ? obsecure2 = false
-                                    : obsecure2 = true;
-                              });
-                            },
-                            icon: Icon(Icons.visibility_off),
-                          ),
-                          labelStyle: GoogleFonts.poppins(
-                            textStyle: TextStyle(
-                                color: Color.fromRGBO(62, 86, 115, 1),
-                                fontSize: 15,
-                                fontWeight: FontWeight.bold),
-                          ),
-                          filled: true,
-                          fillColor: Colors.grey[200],
-                        ),
+                    SizedBox(height: 10,),
+                Container(
+                  child: TextFormField(
+                    onChanged: (value) {
+                      addressStr = value;
+                      setState(() {});
+                    },
+                    controller: address,
+                    keyboardType: TextInputType.text,
+                    validator: (value) {},
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(15.0),
+                        borderSide: BorderSide.none,
                       ),
+                      labelText: "Address",
+                      labelStyle: GoogleFonts.poppins(
+                        textStyle: TextStyle(
+                            color: Color.fromRGBO(62, 86, 115, 1),
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      filled: true,
+                      fillColor: Colors.grey[200],
                     ),
-                    SizedBox(
-                      height: 10,
-                    ),
+                  ),
+                ),
+                    SizedBox(height: 10,),
                     RoundButton(
-                      title: "Register",
+                      title: "Create Pharmacy",
                       onTap: () async {
-                        if (passwordController.text !=
-                            password2Controller.text) {
-                          var snackBar = SnackBar(
-                            content: Text("Password doesn't match"),
-                          );
-                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                        }
-                        PharmacistRegisterModel data = await PharmacistRegisterAPI().register(nameController.text, mobileController.text, emailController.text, liscenceController.text,passwordController.text, File(_selectedImage.toString()), File(_selectedPdf.toString()));
-                        if (formKey.currentState!.validate() && data.message != null && data.message == "User created successfully") {
+                        CreatePharmacyModel data = await CreatePharmacyAPI().create(nameController.text, mobileController.text, emailController.text, pharmacy_no.text.toString(),pharmacist_id.text, address.text,city.text,state.text,File(_selectedImage.toString()), File(_selectedPdf.toString()));
+                        if (formKey.currentState!.validate() && data.message != null && data.message == "Pharmacy created successfully") {
                           var snackBar = SnackBar(
                             content: Text(data.message!),
                           );
                           ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                          // Navigator.push(context, MaterialPageRoute(builder: (context)=>DashBoard()));
+                           Navigator.push(context, MaterialPageRoute(builder: (context)=>DashBoard()));
                         } else {
                           var snackBar = SnackBar(
                             content: Text(data.message!),
@@ -422,7 +395,7 @@ class _PharmacistRegisterState extends State<PharmacistRegister> {
   Future _pickImageFromGallery() async {
     try {
       final returnedImage =
-          await ImagePicker().pickImage(source: ImageSource.gallery);
+      await ImagePicker().pickImage(source: ImageSource.gallery);
       if (returnedImage == null) return;
       setState(() {
         _selectedImage = File(returnedImage.path);

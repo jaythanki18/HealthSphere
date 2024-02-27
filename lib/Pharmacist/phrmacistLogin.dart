@@ -3,7 +3,10 @@ import 'dart:io';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/material.dart';
 import 'package:sgp_project_6/Pharmacist/pharmacistRegister.dart';
+import '../APIs/Pharmacist/pharmacistLoginAPI.dart';
+import '../Models/Pharmacist/pharmacistLoginModel.dart';
 import '../Widgets/RoundButton.dart';
+import '../utils/dashboard.dart';
 
 class PharmacistLogin extends StatefulWidget {
   const PharmacistLogin({Key? key}) : super(key: key);
@@ -45,7 +48,6 @@ class _PharmacistLoginState extends State<PharmacistLogin> {
                     width: screenWidth * 0.9,
                     child: Image.asset("assets/login.jpg"),
                   ),
-                  Text("pharmacist"),
                   Text(
                     "Welcome",
                     style: GoogleFonts.raleway(
@@ -134,10 +136,14 @@ class _PharmacistLoginState extends State<PharmacistLogin> {
                     height: 10,
                   ),
                   RoundButton(
-                    title: "Login",
+                    title: "Pharmacist Login",
                     onTap: () async {
-                      debugPrint(emailController.text);
-                      debugPrint(passwordController.text);
+                     PharmacistLoginModel data = await PharmacistLoginAPI().pharmacistLogin(emailController.text, passwordController.text,"pharmacist");
+                      if (formKey.currentState!.validate() && data.token!=null) {
+                        debugPrint(data.token);
+                        Navigator.push(context, MaterialPageRoute(builder: (context)=>DashBoard()));
+                      }
+                   //   Navigator.push(context, MaterialPageRoute(builder: (context)=>DashBoard()));
                       // Add login logic here
                     },
                   ),

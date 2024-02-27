@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:file_picker/file_picker.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -11,7 +12,6 @@ import '../Models/Doctor/doctorRegisterModel.dart';
 class DoctorRegister extends StatefulWidget {
   const DoctorRegister({Key? key}) : super(key: key);
 
-
   @override
   State<DoctorRegister> createState() => _DoctorRegisterState();
 }
@@ -22,16 +22,18 @@ class _DoctorRegisterState extends State<DoctorRegister> {
   TextEditingController passwordController = TextEditingController();
   TextEditingController password2Controller = TextEditingController();
   TextEditingController mobileController = TextEditingController();
+  TextEditingController idController = TextEditingController();
   String email = "";
   String phone = "";
   String password = "";
   String name = "";
   String photo = "";
-  String doctor_id = "0";
+  String id = "";
   bool obsecure1 = true;
   bool obsecure2 = true;
   final formKey = GlobalKey<FormState>();
   File? _selectedImage;
+  File? _selectedPdf;
 
   @override
   void initState() {
@@ -77,14 +79,13 @@ class _DoctorRegisterState extends State<DoctorRegister> {
                         decoration: BoxDecoration(color: Colors.white),
                         child: _selectedImage != null
                             ? Image.file(
-                          _selectedImage!,
-                          fit: BoxFit.fitHeight,
-                        )
+                                _selectedImage!,
+                                fit: BoxFit.fitHeight,
+                              )
                             : Container(
-                          decoration: BoxDecoration(color: Colors.white),
-                          child: Image.asset(
-                              "assets/add.png"),
-                        ),
+                                decoration: BoxDecoration(color: Colors.white),
+                                child: Image.asset("assets/add.png"),
+                              ),
                       ),
                     ),
                     SizedBox(
@@ -101,6 +102,56 @@ class _DoctorRegisterState extends State<DoctorRegister> {
                               fontFamily: 'Montserrat'),
                         ),
                       ),
+                    ),
+                    SizedBox(
+                      height: screenHeight * 0.02,
+                    ),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        _selectedPdf != null
+                            ? ElevatedButton.icon(
+                                onPressed: _pickPdf,
+                                icon: Icon(Icons.picture_as_pdf,
+                                    size: 35.0, color: Colors.red),
+                                label: SizedBox(
+                                  width: 200,
+                                  height: 50,
+                                  child: Center(
+                                    child: Text(
+                                      _selectedPdf!.path
+                                          .split('/')
+                                          .last, // Show only filename
+                                      style: TextStyle(
+                                          fontSize: 16.0, color: Colors.black),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+                                ),
+                                style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.white),
+                              )
+                            : ElevatedButton.icon(
+                                onPressed: _pickPdf,
+                                icon: Icon(
+                                  Icons.picture_as_pdf,
+                                  size: 35.0,
+                                  color: Colors.red,
+                                ),
+                                label: SizedBox(
+                                    width: 200,
+                                    height: 50,
+                                    child: Center(
+                                        child: Text(
+                                      'Attach Doctor certificate',
+                                      style: TextStyle(color: Colors.black),
+                                    ))),
+                                style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.white),
+                              ),
+                        SizedBox(height: 20.0),
+                      ],
                     ),
                     SizedBox(
                       height: screenHeight * 0.02,
@@ -157,6 +208,35 @@ class _DoctorRegisterState extends State<DoctorRegister> {
                             borderSide: BorderSide.none,
                           ),
                           labelText: "Email Id",
+                          labelStyle: GoogleFonts.poppins(
+                            textStyle: TextStyle(
+                                color: Color.fromRGBO(62, 86, 115, 1),
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          filled: true,
+                          fillColor: Colors.grey[200],
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Container(
+                      child: TextFormField(
+                        onChanged: (value) {
+                          id = value;
+                          setState(() {});
+                        },
+                        controller: idController,
+                        keyboardType: TextInputType.text,
+                        validator: (value) {},
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(15.0),
+                            borderSide: BorderSide.none,
+                          ),
+                          labelText: "Doctor id",
                           labelStyle: GoogleFonts.poppins(
                             textStyle: TextStyle(
                                 color: Color.fromRGBO(62, 86, 115, 1),
@@ -301,11 +381,7 @@ class _DoctorRegisterState extends State<DoctorRegister> {
                     RoundButton(
                       title: "Register",
                       onTap: () async {
-                        debugPrint(nameController.text);
-                        debugPrint(emailController.text);
-                        debugPrint(mobileController.text);
-                        debugPrint(passwordController.text);
-                        debugPrint(_selectedImage.toString());
+                        debugPrint(_selectedPdf.toString());
 
                         if (passwordController.text !=
                             password2Controller.text) {
@@ -314,20 +390,30 @@ class _DoctorRegisterState extends State<DoctorRegister> {
                           );
                           ScaffoldMessenger.of(context).showSnackBar(snackBar);
                         }
-                      //   DoctorRegisterModel data = await DoctorRegisterAPI().register(nameController.text, mobileController.text, emailController.text, doctor_id, File(_selectedImage.toString()), );
-                      //   if (formKey.currentState!.validate() && data.message != null && data.message == "User created successfully") {
-                      //     var snackBar = SnackBar(
-                      //       content: Text(data.message!),
-                      //     );
-                      //     ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                      //     // Navigator.push(context, MaterialPageRoute(builder: (context)=>Dashboard(e_emailid: email.text.toString(),)));
-                      //   } else {
-                      //     var snackBar = SnackBar(
-                      //       content: Text(data.message!),
-                      //     );
-                      //     ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                      //   }
-                       },
+                        DoctorRegisterModel data = await DoctorRegisterAPI()
+                            .register(
+                                nameController.text,
+                                mobileController.text,
+                                emailController.text,
+                                idController.text,
+                                File(_selectedImage.toString()),
+                                File(_selectedPdf.toString()),
+                                passwordController.text);
+                        if (formKey.currentState!.validate() &&
+                            data.message != null &&
+                            data.message == "User created successfully") {
+                          var snackBar = SnackBar(
+                            content: Text(data.message!),
+                          );
+                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                          // Navigator.push(context, MaterialPageRoute(builder: (context)=>Dashboard(e_emailid: email.text.toString(),)));
+                        } else {
+                          var snackBar = SnackBar(
+                            content: Text(data.message!),
+                          );
+                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                        }
+                      },
                     ),
                   ],
                 ),
@@ -376,7 +462,7 @@ class _DoctorRegisterState extends State<DoctorRegister> {
   Future _pickImageFromGallery() async {
     try {
       final returnedImage =
-      await ImagePicker().pickImage(source: ImageSource.gallery);
+          await ImagePicker().pickImage(source: ImageSource.gallery);
       if (returnedImage == null) return;
       setState(() {
         _selectedImage = File(returnedImage.path);
@@ -384,5 +470,25 @@ class _DoctorRegisterState extends State<DoctorRegister> {
     } catch (e) {
       print('Error picking image: $e');
     }
+  }
+
+  Future _pickPdf() async {
+    try {
+      FilePickerResult? result = await FilePicker.platform.pickFiles();
+      if (result == null) {
+        return;
+      }
+      setState(() {
+        _selectedPdf = File(result.files.single.path!);
+      });
+    } catch (e) {
+      print("Error in pick pdf: $e");
+    }
+  }
+
+  String getFormattedFilePath(String filePath) {
+    final filename =
+        filePath.split('/').last; // Handle Windows paths more robustly
+    return '$filename';
   }
 }

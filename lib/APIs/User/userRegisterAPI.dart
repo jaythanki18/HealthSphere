@@ -1,8 +1,10 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:async';
+import 'package:http_parser/http_parser.dart';
+import 'package:http/http.dart' as http;
 
 import 'package:sgp_project_6/Models/User/userRegisterModel.dart';
-import 'package:http/http.dart' as http;
 
 class UserRegisterAPI {
   UserRegisterAPI();
@@ -15,7 +17,7 @@ class UserRegisterAPI {
       String password,
       File userPhoto,
       ) async {
-    var url = "http://192.168.192.8:3000/user";
+    var url = "http://192.168.111.8:3000/user";
     print("Request URL: ${Uri.parse(url)}");
     print("$fullName $mobileNumber $email $medicalStudent $password $userPhoto");
     try {
@@ -28,15 +30,20 @@ class UserRegisterAPI {
       request.fields['medical_student'] = medicalStudent;
       request.fields['password'] = password;
 
-      // Attach the image file
+      // Attach the image file using provided function
       if (userPhoto != null) {
-        request.files.add(
-          await http.MultipartFile.fromPath(
-            'user_photo',
-            userPhoto.path,
-          ),
+        var photostream = http.ByteStream(userPhoto.openRead());
+        var photosize = await userPhoto.length();
+        var photofile = http.MultipartFile(
+          "user_photo",
+          photostream,
+          photosize,
+          filename: userPhoto.path.split('/').last,
+          contentType: MediaType('image', 'jpeg'), // Change content type if necessary
         );
+        request.files.add(photofile);
       }
+
       // Send the request
       var streamedResponse = await request.send();
 

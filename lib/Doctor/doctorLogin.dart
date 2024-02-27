@@ -2,7 +2,10 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/material.dart';
+import 'package:sgp_project_6/APIs/Doctor/doctorLoginAPI.dart';
+import 'package:sgp_project_6/Models/Doctor/doctorLoginModel.dart';
 import '../Widgets/RoundButton.dart';
+import '../utils/dashboard.dart';
 import 'doctorRegister.dart';
 
 class DoctorLogin extends StatefulWidget {
@@ -45,7 +48,6 @@ class _DoctorLoginState extends State<DoctorLogin> {
                     width: screenWidth * 0.9,
                     child: Image.asset("assets/login.jpg"),
                   ),
-                  Text("doctor"),
                   Text(
                     "Welcome",
                     style: GoogleFonts.raleway(
@@ -134,10 +136,19 @@ class _DoctorLoginState extends State<DoctorLogin> {
                     height: 10,
                   ),
                   RoundButton(
-                    title: "Login",
+                    title: "Docotr Login",
                     onTap: () async {
                       debugPrint(emailController.text);
                       debugPrint(passwordController.text);
+                      DoctorLoginModel data = await DoctorLoginAPI().doctorLogin(emailController.text, passwordController.text,"doctor");
+                      if (formKey.currentState!.validate() && data.token!=null) {
+                        debugPrint(data.token);
+                        var snackBar = SnackBar(
+                          content: Text("Logged in successdully!"),
+                        );
+                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                        Navigator.push(context, MaterialPageRoute(builder: (context)=>DashBoard()));
+                      }
                       // Add login logic here
                     },
                   ),
