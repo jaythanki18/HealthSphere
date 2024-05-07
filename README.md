@@ -1,4 +1,4 @@
-# sgp_project_6
+# Health Sphere
 
  The purpose of HealthSphere is to create a supportive online community where
  medical students, doctors, pharmacists, and general users can connect, learn, and
