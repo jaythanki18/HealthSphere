@@ -18,7 +18,7 @@ class DoctorRegisterAPI {
       File doctorCertificate,
       String password,
       ) async {
-    var url = "http://192.168.111.8:3000/doctor";
+    var url = "http://192.168.166.8:3000/doctor";
     print("Request URL: ${Uri.parse(url)}");
     print(
         "$fullName $mobileNumber $email $doctorId $doctorPhoto $doctorCertificate $password");

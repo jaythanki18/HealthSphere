@@ -18,7 +18,7 @@ class PharmacistRegisterAPI {
       File pharmacistPhoto,
       File pharmacistCertificate,
       ) async {
-    var url = "http://192.168.111.8:3000/pharmacist";
+    var url = "http://192.168.166.8:3000/pharmacist";
     print("Request URL: ${Uri.parse(url)}");
     print("$fullName $mobileNumber $email $password $pharmacistPhoto");
     try {

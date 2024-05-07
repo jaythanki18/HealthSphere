@@ -17,6 +17,7 @@ class _ShowPharmacyState extends State<ShowPharmacy> {
   bool _showSearchImage = true;
   bool _searched = false;
 
+
   Future<List<GetAllPharmacyModel>> searchAPI() async {
     String searchQuery = _searchController.text;
     String selectedState = 'gujarat';
@@ -62,8 +63,11 @@ class _ShowPharmacyState extends State<ShowPharmacy> {
                         ),
                         onChanged: (value) {},
                         onSubmitted: (value) {
-                          searchAPI();
-                          // _searchPharmacies();
+                          searchAPI().then((newPharmacies) {
+                            setState(() {
+                              _pharmacies = newPharmacies;
+                            });
+                          });
                         },
                       ),
                     ),
@@ -111,7 +115,7 @@ class _ShowPharmacyState extends State<ShowPharmacy> {
                                         child: Padding(
                                           padding: EdgeInsets.only(left: 10,right: 10),
                                           child: Image.network(
-                                            pharmacy.pharmacyPhoto ?? '', // Provide a default value here
+                                            snapshot.data![0].pharmacyPhoto.toString() ?? '', // Provide a default value here
                                             width: 80.0,
                                             height: 80.0,
                                               errorBuilder: (context, error, stackTrace) => Image.asset('assets/medicine.png')

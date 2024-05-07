@@ -16,7 +16,7 @@ class PharmacyAPI {
       'state': state,
     };
 
-    uri = Uri.parse('http://192.168.111.8:3000/pharmacy/?${queryParameters.toString()}');
+    uri = Uri.parse('http://192.168.166.8:3000/pharmacy/?${queryParameters.toString()}');
     print(uri.toString());
 
     final response = await http.get(uri);

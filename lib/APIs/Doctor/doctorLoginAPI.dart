@@ -7,7 +7,7 @@ class DoctorLoginAPI {
   DoctorLoginAPI();
 
   Future<DoctorLoginModel> doctorLogin(String email, String password, String role) async {
-    var url = "http://192.168.111.8:3000/auth/login";
+    var url = "http://192.168.166.8:3000/auth/login";
     print("Request URL: ${Uri.parse(url)}");
     print("$email $password $role");
     try {

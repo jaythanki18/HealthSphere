@@ -20,7 +20,7 @@ class CreatePharmacyAPI {
       File pharmacy_photo,
       File pharmacy_certificate,
       ) async {
-    var url = "http://192.168.111.8:3000/pharmacy";
+    var url = "http://192.168.166.8:3000/pharmacy";
     print("Request URL: ${Uri.parse(url)}");
     print(
         "$fullName, $mobileNumber, $email, $pharmacy_no, $pharmacist_id, $address, $city, $state, $pharmacy_photo, $pharmacy_certificate");

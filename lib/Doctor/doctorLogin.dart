@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/material.dart';
 import 'package:sgp_project_6/APIs/Doctor/doctorLoginAPI.dart';
+import 'package:sgp_project_6/Doctor/doctorDashboard.dart';
 import 'package:sgp_project_6/Models/Doctor/doctorLoginModel.dart';
 import '../Widgets/RoundButton.dart';
 import '../utils/dashboard.dart';
@@ -147,7 +148,7 @@ class _DoctorLoginState extends State<DoctorLogin> {
                           content: Text("Logged in successdully!"),
                         );
                         ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                        Navigator.push(context, MaterialPageRoute(builder: (context)=>DashBoard()));
+                        Navigator.push(context, MaterialPageRoute(builder: (context)=>DoctorDashBoard(token: data.token!)));
                       }
                       // Add login logic here
                     },

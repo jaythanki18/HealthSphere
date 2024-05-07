@@ -1,12 +1,14 @@
-import 'dart:convert';
+
 import 'dart:io';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
+
 import 'package:sgp_project_6/APIs/User/userLoginAPI.dart';
+
 import 'package:sgp_project_6/Models/User/userLoginModel.dart';
+import 'package:sgp_project_6/User/userDashboard.dart';
 import 'package:sgp_project_6/User/user_registration.dart';
-import 'package:sgp_project_6/utils/dashboard.dart';
+
 import '../Widgets/RoundButton.dart';
 
 class UserLogin extends StatefulWidget {
@@ -23,6 +25,19 @@ class _UserLoginState extends State<UserLogin> {
   final formKey = GlobalKey<FormState>();
   File? _selectedImage;
 
+  //  Future<bool> saveToken(value) async {
+  //   SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+  //   return await sharedPreferences.setString('token', value);
+  // }
+  //
+  // Future<String?> loadToken() async{
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   //Return String
+  //   String? stringValue = prefs.getString('stringValue');
+  //   return stringValue;
+  // }
+
+
   @override
   Widget build(BuildContext context) {
     // Get the screen size
@@ -31,6 +46,7 @@ class _UserLoginState extends State<UserLogin> {
     final double screenWidth = screenSize.width;
     // Get the screen height
     final double screenHeight = screenSize.height;
+
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -140,12 +156,14 @@ class _UserLoginState extends State<UserLogin> {
                     onTap: () async {
                       print(emailController.text);
                       print(passwordController.text);
-                      // UserLoginModel data = await UserLoginAPI().userLogin(emailController.text, passwordController.text,"user");
-                      // if (formKey.currentState!.validate() && data.token!=null) {
-                      //   debugPrint(data.token);
-                      //     Navigator.push(context, MaterialPageRoute(builder: (context)=>DashBoard()));
-                      // }
-                      Navigator.push(context, MaterialPageRoute(builder: (context)=>DashBoard()));
+                      UserLoginModel data = await UserLoginAPI().userLogin(emailController.text, passwordController.text,"user");
+                      if (formKey.currentState!.validate() && data.token!=null) {
+                     //   debugPrint(loadToken() as String?);
+                        //debugPrint(data.token);
+                         // Navigator.push(context, MaterialPageRoute(builder: (context)=>DashBoard(token:data.token.toString())));
+                        Navigator.push(context, MaterialPageRoute(builder: (context)=>UserDashBoard(token: data.token!)));
+                      }
+                      //Navigator.push(context, MaterialPageRoute(builder: (context)=>DashBoard()));
                       // Add login logic here
                     },
                   ),

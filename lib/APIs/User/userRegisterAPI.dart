@@ -17,7 +17,7 @@ class UserRegisterAPI {
       String password,
       File userPhoto,
       ) async {
-    var url = "http://192.168.111.8:3000/user";
+    var url = "http://192.168.166.8:3000/user";
     print("Request URL: ${Uri.parse(url)}");
     print("$fullName $mobileNumber $email $medicalStudent $password $userPhoto");
     try {

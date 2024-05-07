@@ -1,9 +1,9 @@
-class PostModel {
+class ShowPostsModel {
   List<Posts>? posts;
 
-  PostModel({this.posts});
+  ShowPostsModel({this.posts});
 
-  PostModel.fromJson(Map<String, dynamic> json) {
+  ShowPostsModel.fromJson(Map<String, dynamic> json) {
     if (json['posts'] != null) {
       posts = <Posts>[];
       json['posts'].forEach((v) {

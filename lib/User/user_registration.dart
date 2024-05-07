@@ -355,4 +355,5 @@ class _UserRegisterState extends State<UserRegister> {
   } catch (e) {
     print('Error picking image: $e');
   }
-}}
+}
+}

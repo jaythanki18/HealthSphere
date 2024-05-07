@@ -9,7 +9,7 @@ import 'package:sgp_project_6/Models/Posts/CreatePostModel.dart';
 class CreatePostAPI {
   CreatePostAPI();
 
-  Future<CreatePostModel> register(
+  Future<CreatePostModel> createPost(
       String token,
       String title,
       String description,
@@ -23,7 +23,7 @@ class CreatePostAPI {
       var request = http.MultipartRequest('POST', Uri.parse(url));
 
       // Add authorization header
-      request.headers['Authorization'] = 'Bearer $token';
+      request.headers['Authorization'] = '$token';
 
       // Add fields to the request
       request.fields['title'] = title;
@@ -33,14 +33,18 @@ class CreatePostAPI {
       if (post_image != null) {
         var photostream = http.ByteStream(post_image.openRead());
         var photosize = await post_image.length();
+        // Assuming post_image.path contains the file path of the image
+        String fileExtension = post_image.path.split('.').last; // Extracting file extension
+
         var photofile = http.MultipartFile(
           "post_image",
           photostream,
           photosize,
           filename: post_image.path.split('/').last,
-          contentType: MediaType('image', 'jpg'), // Change content type if necessary
+          contentType: MediaType('image', fileExtension), // Using dynamic file extension
         );
         request.files.add(photofile);
+
       }
 
       // Send the request

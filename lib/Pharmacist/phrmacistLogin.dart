@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/material.dart';
+import 'package:sgp_project_6/Pharmacist/pharmacistDashboard.dart';
 import 'package:sgp_project_6/Pharmacist/pharmacistRegister.dart';
 import '../APIs/Pharmacist/pharmacistLoginAPI.dart';
 import '../Models/Pharmacist/pharmacistLoginModel.dart';
@@ -141,7 +142,7 @@ class _PharmacistLoginState extends State<PharmacistLogin> {
                      PharmacistLoginModel data = await PharmacistLoginAPI().pharmacistLogin(emailController.text, passwordController.text,"pharmacist");
                       if (formKey.currentState!.validate() && data.token!=null) {
                         debugPrint(data.token);
-                        Navigator.push(context, MaterialPageRoute(builder: (context)=>DashBoard()));
+                        Navigator.push(context, MaterialPageRoute(builder: (context)=>PharmacistDashBoard(token: data.token!,)));
                       }
                    //   Navigator.push(context, MaterialPageRoute(builder: (context)=>DashBoard()));
                       // Add login logic here
