@@ -17,7 +17,7 @@
 ![Screenshot 4](https://github.com/jaythanki18/Pharmacy_Project_SGP_4/assets/108997046/a4e49979-770a-4704-8c04-1c731e9b0d05)
 ![Screenshot 5](https://github.com/jaythanki18/Pharmacy_Project_SGP_4/assets/108997046/087a25b6-d2de-4e09-ad61-59ef5cdbd2ae)
 ![Screenshot 6](https://github.com/jaythanki18/Pharmacy_Project_SGP_4/assets/108997046/bfc0e015-f871-435b-9dca-8d4da27653bd)
-![Screenshot 7](https://github.com/jaythanki18/Pharmacy_Project_SGP_4/assets/108997046/e6cda77b-2e69-4683-9118-1c7b35e704f6)
+![new_show_pharmacy (1)](https://github.com/jaythanki18/HealthSphere/assets/108997046/86bbaebc-2c36-4bf7-a934-b9ccfcb987d2)
 ![Screenshot 8](https://github.com/jaythanki18/HealthSphere/assets/108997046/f2707b7a-aeda-4d87-9d40-d4ee010df8e5)
 ![Screenshot 9](https://github.com/jaythanki18/HealthSphere/assets/108997046/8289111c-ed98-4096-b50c-4bbb760e96bb)
 ![Screenshot 10](https://github.com/jaythanki18/HealthSphere/assets/108997046/25a68b23-c1d5-4dd3-af40-080d79f62cef)
